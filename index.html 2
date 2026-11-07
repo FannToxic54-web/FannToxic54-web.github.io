@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question for Grace ❤️</title>
+    <!-- Canvas Confetti Library for the celebration effect -->
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffe6e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #4a4a4a;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .gif-container img {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            height: 50px;
+            position: relative;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.1s ease, font-size 0.2s ease, padding 0.2s ease;
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            z-index: 10;
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+        }
+
+        #noBtn {
+            background-color: #7a7a7a;
+            color: white;
+            position: absolute;
+            left: calc(50% + 10px); 
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="card">
+        <div class="gif-container">
+            <!-- Cute love heart GIF -->
+            <img id="displayGif" src="https://giphy.com" alt="Cute heart">
+        </div>
+        <h1 id="question">Grace... ❤️</h1>
+        <p id="subtext">Do you love me?</p>
+        
+        <div class="buttons">
+            <button id="yesBtn" onclick="nextQuestion()">Yes!</button>
+            <button id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const question = document.getElementById('question');
+        const subtext = document.getElementById('subtext');
+        const gif = document.getElementById('displayGif');
+
+        let currentStep = 1;
+        let escapeCount = 0;
+
+        function moveNoButton() {
+            // Calculate screen space boundaries
+            const padding = 50;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+            // Generate completely random coordinates
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            // Force the button to escape the mouse or tap
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            // Grow the YES button bigger with every evasion
+            escapeCount++;
+            const multiplier = 1 + (escapeCount * 0.25);
+            yesBtn.style.transform = `scale(${multiplier})`;
+        }
+
+        function nextQuestion() {
+            // Reset position configurations and size scales for the next stage
+            escapeCount = 0;
+            yesBtn.style.transform = 'scale(1)';
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = 'calc(50% + 10px)';
+            noBtn.style.top = 'auto';
+
+            if (currentStep === 1) {
+                // Move from first question to second question
+                currentStep = 2;
+                subtext.innerHTML = "Do you think I will be your future husband?";
+            } else if (currentStep === 2) {
+                // Final declaration state
+                showFinalMessage();
+            }
+        }
+
+        function showFinalMessage() {
+            // Terminate the elusive No button
+            noBtn.style.display = 'none';
+            yesBtn.style.display = 'none';
+            
+            // Render the concluding love declaration
+            question.innerHTML = "I love you too, my love! 🥰";
+            subtext.innerHTML = "Forever and always.";
+            
+            // Swap out the visual representation with an interactive celebration asset
+            gif.src = "https://giphy.com";
+
+            // Fire structural canvas confetti bursts
+            var duration = 4 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 4,
+                    angle: 60,
+                    spread: 60,
+                    origin: { x: 0 },
+                    colors: ['#ff4d6d', '#ff758f', '#ffb3c1']
+                });
+                confetti({
+                    particleCount: 4,
+                    angle: 120,
+                    spread: 60,
+                    origin: { x: 1 },
+                    colors: ['#ff4d6d', '#ff758f', '#ffb3c1']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    </script>
+</body>
+</html>
