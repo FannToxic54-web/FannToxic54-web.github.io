@@ -37,8 +37,9 @@
 
         p {
             color: #4a4a4a;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 30px;
+            font-weight: 500;
         }
 
         .gif-container img {
@@ -93,11 +94,11 @@
             <!-- Cute love heart GIF -->
             <img id="displayGif" src="https://giphy.com" alt="Cute heart">
         </div>
-        <h1 id="question">I love you so much, Grace! ❤️</h1>
-        <p id="subtext">Will you go out on a date with me on November 8th, 2026?</p>
+        <h1 id="question">Grace... ❤️</h1>
+        <p id="subtext">Do you love me?</p>
         
         <div class="buttons">
-            <button id="yesBtn" onclick="selectYes()">Yes!</button>
+            <button id="yesBtn" onclick="nextQuestion()">Yes!</button>
             <button id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
         </div>
     </div>
@@ -109,45 +110,61 @@
         const subtext = document.getElementById('subtext');
         const gif = document.getElementById('displayGif');
 
-        let clickCount = 0;
+        let currentStep = 1;
+        let escapeCount = 0;
 
         function moveNoButton() {
-            // Get screen dimensions minus boundaries
+            // Calculate screen space boundaries
             const padding = 50;
             const maxX = window.innerWidth - noBtn.offsetWidth - padding;
             const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-            // Generate random positions
+            // Generate completely random coordinates
             const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
             const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
 
-            // Move the button completely out of reach
+            // Force the button to escape the mouse or tap
             noBtn.style.position = 'fixed';
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
 
-            // Make the YES button grow aggressively bigger every time she tries to hit NO
-            clickCount++;
-            const multiplier = 1 + (clickCount * 0.25);
+            // Grow the YES button bigger with every evasion
+            escapeCount++;
+            const multiplier = 1 + (escapeCount * 0.25);
             yesBtn.style.transform = `scale(${multiplier})`;
         }
 
-        function selectYes() {
-            // Hide the elusive No button
-            noBtn.style.display = 'none';
-            
-            // Reset Yes button transform so layout looks perfect
+        function nextQuestion() {
+            // Reset position configurations and size scales for the next stage
+            escapeCount = 0;
             yesBtn.style.transform = 'scale(1)';
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = 'calc(50% + 10px)';
+            noBtn.style.top = 'auto';
+
+            if (currentStep === 1) {
+                // Move from first question to second question
+                currentStep = 2;
+                subtext.innerHTML = "Do you think I will be your future husband?";
+            } else if (currentStep === 2) {
+                // Final declaration state
+                showFinalMessage();
+            }
+        }
+
+        function showFinalMessage() {
+            // Terminate the elusive No button
+            noBtn.style.display = 'none';
             yesBtn.style.display = 'none';
             
-            // Update the proposal card
-            question.innerHTML = "Yay! It's a date! 🥰";
-            subtext.innerHTML = "I can't wait to see you on November 8th! I'll text you the final details.";
+            // Render the concluding love declaration
+            question.innerHTML = "I love you too, my love! 🥰";
+            subtext.innerHTML = "Forever and always.";
             
-            // Change to a happy celebration GIF
+            // Swap out the visual representation with an interactive celebration asset
             gif.src = "https://giphy.com";
 
-            // Continuous confetti burst
+            // Fire structural canvas confetti bursts
             var duration = 4 * 1000;
             var end = Date.now() + duration;
 
